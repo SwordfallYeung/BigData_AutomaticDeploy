@@ -6,13 +6,18 @@ function editHostFile()
  echo "edit the host file"
  
  #获取三台机器ip地址
- ip1=$1
- ip2=$2
- ip3=$3
- 
- addIpToHostFile $ip1 node1
- addIpToHostFile $ip2 node2
- addIpToHostFile $ip3 node3
+ ipString=$1
+ #1.分割字符串 //与/之间是分割的字符，另外/后有一个空格不可省略
+ ipSplit=${ipString//,/ }
+ ipArr=($ipSplit)
+  
+ #2.遍历数组ipArr
+ for((x=0;x<${#ipArr[*]};x++))
+ do
+    #echo ${ipArr[$x]}
+    y=`expr $x + 1`
+    addIpToHostFile ${ipArr[$x]} node$y
+ done 
 
  echo "edit the host file successfully"
 }
@@ -20,6 +25,7 @@ function editHostFile()
 function addIpToHostFile()
 {
  ip=$1
+ node=$2
  #查询$ip1 node1是否存在于/etc/hosts里面
  egrep "^$ip $node" /etc/hosts >& /dev/null
  if [ $? -ne 0 ]
@@ -28,6 +34,6 @@ function addIpToHostFile()
  fi
 }
 
-#editHostFile 192.168.187.201 192.168.187.202 192.168.187.203
+editHostFile 192.168.187.201,192.168.187.202,192.168.187.203
 
 
