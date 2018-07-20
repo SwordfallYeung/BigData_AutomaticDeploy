@@ -49,14 +49,24 @@ function sshFreeLogin()
  for((x=0;x<${#ipArr[*]};x++))
  do
     #ssh公私钥生成
-    ssh-keygen -t rsa
-    for((y=0;y<${#ipArr[*]};y++))
-    do
-       echo ${ipArr[$x]}::${ipArr[$y]}
-       n=`expr $y + 1`
-       ssh-copy-ip node$n
-    done
+    autoCreateSSH 
+    
+    #for((y=0;y<${#ipArr[*]};y++))
+    #do
+     #  echo ${ipArr[$x]}---${ipArr[$y]}
+     #  n=`expr $y + 1`
+      # ssh-copy-id node$n
+    #done
  done
 }
 
-sshFreeLogin 192.168.187.201,192.168.187.202,192.168.187.203
+#sshFreeLogin 192.168.187.201,192.168.187.202,192.168.187.203
+
+function autoCreateSSH()
+{
+ #1.密钥对不存在则创建密钥
+ [ ! -f /root/.ssh/id_rsa.pub ] && ssh-keygen -t rsa -P '' >& /dev/null
+ 
+}
+
+autoCreateSSH
