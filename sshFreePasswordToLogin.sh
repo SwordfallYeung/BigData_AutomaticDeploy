@@ -34,6 +34,29 @@ function addIpToHostFile()
  fi
 }
 
-editHostFile 192.168.187.201,192.168.187.202,192.168.187.203
+#editHostFile 192.168.187.201,192.168.187.202,192.168.187.203
 
+function sshFreeLogin()
+{
+ #1.获取三台机器ip地址
+ ipString=$1
+ 
+ #2.分割字符串 //与/之间是分割的字符，另外/后有一个空格不可省略
+ ipSplit=${ipString//,/ }
+ ipArr=($ipSplit)
+ 
+ #3.遍历数组ipArr
+ for((x=0;x<${#ipArr[*]};x++))
+ do
+    #ssh公私钥生成
+    ssh-keygen -t rsa
+    for((y=0;y<${#ipArr[*]};y++))
+    do
+       echo ${ipArr[$x]}::${ipArr[$y]}
+       n=`expr $y + 1`
+       ssh-copy-ip node$n
+    done
+ done
+}
 
+sshFreeLogin 192.168.187.201,192.168.187.202,192.168.187.203
