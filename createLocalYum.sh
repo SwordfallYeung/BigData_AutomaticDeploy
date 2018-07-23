@@ -52,7 +52,11 @@ function mountCentos()
  #4.列出可用的YUM源
  yum repolist
  #5.安装相应的软件
- yum install -y httpd
+ httpdIsExists=`rpm -qa | grep http`
+ if [ -z $httpdIsExists ]
+ then
+     yum install -y httpd
+ fi
  #6.开启httpd使用浏览器访问
  #service httpd start
  systemctl start httpd.service
