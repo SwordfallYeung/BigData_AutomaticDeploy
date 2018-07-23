@@ -64,23 +64,33 @@ function sshFreeLogin()
 
 function autoCreateSSH()
 {
- #1.使用yum安装expect
- #yum -y install expect
+ #1.检测expect服务是否存在，不存在则使用yum安装expect
+ expectIsExists=`rpm -qa | grep expect` 
+ if [ -z $expectIsExists ]
+ then
+      yum -y install expect
+ fi
+ 
  #2.密钥对不存在则创建密钥
- [ ! -f /root/.ssh/id_rsa.pub ] && ssh-keygen -t rsa -P '' >& /dev/null
-# while read line;do
-#        ip=`echo $line | cut -d " " -f1`         #提取文件中的ip
-#        user_name=`echo $line | cut -d " " -f2`  #提取文件中的用户名
-#        pass_word=`echo $line | cut -d " " -f3`  #提取文件中的密码
-# expect <<EOF
-#          spawn ssh-copy-id -i /root/.ssh/id_rsa.pub $user_name@$ip #复制公钥到目标主机
-#          expect {
-#                  "yes/no" { send "yes\n";exp_continue } #expect实现自动输入密码
-#                  "password" { send "$pass_word\n" }
-#          }
-#          expect eof
-#EOF
-# done < /home/hadoop/automaticDeploy/host_ip.txt  # 读取存储ip的文件
+ [ ! -f /root/.ssh/id_rsa.pub ] && ssh-keygen -t rsa -P "" -f /root/.ssh/id_rsa
+ while read line;do
+        #提取文件中的ip
+        ip=`echo $line | cut -d " " -f1`
+        #提取文件中的用户名
+        user_name=`echo $line | cut -d " " -f2`
+        #提取文件中的密码
+        pass_word=`echo $line | cut -d " " -f3`
+ expect <<EOF
+          #复制公钥到目标主机
+          spawn ssh-copy-id  $ip 
+          expect {
+                  #expect实现自动输入密码
+                  "yes/no" { send "yes\n";exp_continue } 
+                  "password" { send "$pass_word\n" }
+          }
+          expect eof
+EOF
+ done < /home/hadoop/automaticDeploy/host_ip.txt  # 读取存储ip的文件
 }
 
 autoCreateSSH
