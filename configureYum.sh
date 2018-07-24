@@ -4,9 +4,9 @@
 function configureYumSource()
 {
  yumUrl=$1 
-
+ $yumFile=$2
+ 
  #1.把CentOS-Media.repo文件非#开头的行注释掉
- yumFile=/etc/yum.repos.d/CentOS-Media.repo
  sed -i 's/^[^#]/#&/' $yumFile
  #2.配置本地源
  echo "[base]" >> $yumFile
@@ -53,6 +53,7 @@ function localYumSource()
 {
  systemUrl=$1
  yumUrl=$2
+ yumFile=/etc/yum.repos.d/CentOS-Media.repo
 
  #1.不存在则创建mount的目录
  if [ ! -d /var/iso ]
@@ -63,10 +64,10 @@ function localYumSource()
  mount -o loop $systemUrl /var/iso
 
  #2.处理并保证只有一个CentOS-Media.repo的文件用于配置本地yum源
- doWithRepoFile
- 
+ doWithRepoFile 
+
  #3.配置yum源
- configureYumSource /var/iso 
+ configureYumSource file:///var/iso/ $yumFile
 
  #4.安装相应的软件
  httpdIsExists=`rpm -qa | grep http`
