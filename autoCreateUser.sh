@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #创建bigdata用户组，创建bigdata用户并设置密码
-function createUser()
+function createUserAndGroup()
 {
  echo "start to create user 'bigdata'!"
 
@@ -24,7 +24,15 @@ function createUser()
      useradd -g $group $user
  fi
 
- passwd bigdata
+ #在shell中使用expect实现自动输入密码，通常需要与'expect <<EOF EOF'、spawn、子expect一起使用
+ expect << EOF
+ spawn passwd $user
+ expect "New password:"
+ send "${user}\r"
+ expect "Retype new password:"
+ send "${user}\r"
+ expect eof;
+EOF
 }
 
 #删除bigdata用户，删除bigdata用户组
@@ -41,6 +49,18 @@ function deleteUserAndGroup()
  fi
 }
 
-#createUser bigdata bigdata
+operate=$1
 
-#deleteUserAndGroup bigdata bigdata
+if [ -z $operate ]
+then
+    echo "参数为空，请输入参数create或delete"
+else
+    if [[ $operate = "create" ]]
+    then
+        createUserAndGroup bigdata bigdata
+    fi
+    if [[ $operate = "delete" ]]
+    then
+        deleteUserAndGroup bigdata bigdata
+    fi
+fi
