@@ -42,6 +42,18 @@ function startFirewallAndGetenforce()
  #reboot
 }
 
-closeFirewallAndGetenforce
+operate=$1
 
-#startFirewallAndGetenforce
+if [ -z $operate ]
+then
+    echo "参数为空，请输入参数close或start"
+else
+    if [[ $operate = "close" ]]
+    then
+        closeFirewallAndGetenforce
+    fi
+    if [[ $operate = "start" ]]
+    then
+        startFirewallAndGetenforce
+    fi
+fi
