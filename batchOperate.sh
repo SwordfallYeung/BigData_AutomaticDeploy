@@ -21,7 +21,10 @@ echo "4.关闭防火墙、SELINUX"
 echo "5.添加bigdata用户名"
 /home/hadoop/automaticDeploy/autoCreateUser.sh delete
 
-#6.配置SSH无密码登录
+#6.配置yum源
+/home/hadoop/automaticDeploy/configureYum.sh $hostname
+
+#7.配置SSH无密码登录
 echo "6.集群各节点之间配置SSH无密码登录"
 #/home/hadoop/automaticDeploy/sshFreeLogin.sh
 
