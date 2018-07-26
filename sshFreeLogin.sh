@@ -22,7 +22,7 @@ function sshFreeLogin()
           
        expect <<EOF
               #复制公钥到目标主机
-              spawn ssh-copy-id -f $hostname
+              spawn ssh-copy-id $hostname
               expect {
                       #expect实现自动输入密码
                       "yes/no" { send "yes\n";exp_continue } 
