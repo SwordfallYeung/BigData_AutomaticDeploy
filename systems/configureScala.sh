@@ -28,15 +28,19 @@ function configureScala()
     echo "export SCALA_HOME=$scala_home" >> $profile
 
     #4.在/etc/profile配置PATH
-    pathIsExists=`grep "^export PATH=" $profile`
-    scala_homeIsExists=`grep "^export PATH=" $profile | grep "SCALA_HOME/bin"`
-    if [[ -z $scala_homeIsExists ]];then
-        if [[ -z $pathIsExists ]];then
-           echo "export PATH=\$PATH:\$SCALA_HOME/bin" >> $profile
-        else
-           sed -i 's/^export PATH=.*/&:\$SCALA_HOME\/bin/' $profile
-        fi
-    fi
+    sed -i "/^export PATH=\$PATH:\$SCALA_HOME\/bin/d" $profile
+    echo "export PATH=\$PATH:\$SCALA_HOME/bin" >> $profile
+  
+    #不需要
+    #pathIsExists=`grep "^export PATH=" $profile`
+    #scala_homeIsExists=`grep "^export PATH=" $profile | grep "SCALA_HOME/bin"`
+    #if [[ -z $scala_homeIsExists ]];then
+    #    if [[ -z $pathIsExists ]];then
+    #       echo "export PATH=\$PATH:\$SCALA_HOME/bin" >> $profile
+    #    else
+    #       sed -i 's/^export PATH=.*/&:\$SCALA_HOME\/bin/' $profile
+    #    fi
+    #fi
  else 
      echo "/opt/frames目录下没有scala$version安装包"
  fi
