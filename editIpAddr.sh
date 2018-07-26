@@ -70,7 +70,10 @@ function editIpAddr()
 
  doWithNetworkFile
  
- configureIpAddr $ip $gateway
+ configureIpAddr $ip $gateway 
+ 
+ #重启网络服务
+ service network restart
 }
 
 
