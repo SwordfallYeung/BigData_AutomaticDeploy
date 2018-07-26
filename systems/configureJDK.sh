@@ -25,19 +25,24 @@ function configureJDK()
 
     #3.在/etc/profile配置JAVA_HOME
     profile=/etc/profile
+    
     sed -i "/^export JAVA_HOME/d" $profile
     echo "export JAVA_HOME=$java_home" >> $profile
  
     #4.在/etc/profile配置PATH
-    pathIsExists=`grep "^export PATH=" $profile`
-    java_homeIsExists=`grep "^export PATH=" $profile | grep "JAVA_HOME/bin"`
-    if [[ -z $java_homeIsExists ]];then
-        if [[ -z $pathIsExists ]];then
-           echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> $profile
-        else
-           sed -i 's/^export PATH=.*/&:\$JAVA_HOME\/bin/' $profile
-        fi
-    fi
+    sed -i "/^export PATH=\$PATH:\$JAVA_HOME\/bin/d" $profile
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> $profile
+    echo "export CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> $profile
+    #不需要
+    #pathIsExists=`grep "^export PATH=" $profile`
+    #java_homeIsExists=`grep "^export PATH=" $profile | grep "JAVA_HOME/bin"`
+    #if [[ -z $java_homeIsExists ]];then
+    #     if [[ -z $pathIsExists ]];then
+    #        echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> $profile
+    #     else
+    #        sed -i 's/^export PATH=.*/&:\$JAVA_HOME\/bin/' $profile
+    #     fi
+    # fi
  else 
      echo "/opt/frames目录下没有jdk$version安装包"
  fi
