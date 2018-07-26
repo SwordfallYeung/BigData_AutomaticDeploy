@@ -35,6 +35,8 @@ function configureIpAddr()
  #1.把ifcfg-ens33文件非#开头的行注释掉
  sed -i 's/^[^#]/#&/' $fileUrl
  
+ UUID=`grep "^#UUID=*" $fileUrl | head -1`
+ 
  #2.配置本地源
  #配置名字
  echo "NAME=ens33" >> $fileUrl
@@ -43,7 +45,7 @@ function configureIpAddr()
  #连接类型
  echo "TYPE=Ethernet" >> $fileUrl
  #唯一标识
- echo "UUID=$UUID" >> $fileUrl
+ echo "${UUID:1}" >> $fileUrl
  #开机即启动网络
  echo "ONBOOT=yes" >> $fileUrl
  echo "NM_CONTROLLED=yes" >> $fileUrl
