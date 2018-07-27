@@ -90,6 +90,101 @@ function configureHdfsSite()
  echo "</configuration>" >> $hdfsSiteUrl
 }
 
+function configureMapredSite()
+{
+ mapredSiteUrl=$1
+
+ cp $mapredSiteUrl.template $mapredSiteUrl
+ 
+ n=`sed -n -e "/<configuration>/="  $mapredSiteUrl`
+ sed -i "`expr $n + 1`d" $mapredSiteUrl
+ sed -i "/^<\/configuration>/d" $mapredSiteUrl
+
+ #mapreduce的框架
+ echo "  <property>" >> $mapredSiteUrl
+ echo "      <name>mapreduce.framework.name</name>" >> $mapredSiteUrl
+ echo "      <value>yarn</value>" >> $mapredSiteUrl
+ echo "  </property>" >> $mapredSiteUrl
+
+ #jobhistory的地址
+ echo "  <property>" >> $mapredSiteUrl
+ echo "      <name>mapreduce.jobhistory.address</name>" >> $mapredSiteUrl
+ echo "      <value>node1:10020</value>" >> $mapredSiteUrl
+ echo "  </property>" >> $mapredSiteUrl
+
+ #jobhistory的webapp地址
+ echo "  <property>" >> $mapredSiteUrl
+ echo "      <name>mapreduce.jobhistory.webapp.address</name>" >> $mapredSiteUrl
+ echo "      <value>node1:19888</value>" >> $mapredSiteUrl
+ echo "  </property>" >> $mapredSiteUrl
+
+ echo "</configuration>" >> $mapredSiteUrl
+}
+
+function configureYarnSite()
+{
+ yarnSiteUrl=$1
+
+ n=`sed -n -e "/<configuration>/="  $yarnSiteUrl`
+ sed -i "`expr $n + 1`d" $yarnSiteUrl
+ sed -i "/^<\/configuration>/d" $yarnSiteUrl
+
+ #nodemanager的aux-services
+ echo "  <property>" >> $yarnSiteUrl
+ echo "      <name>yarn.nodemanager.aux-services</name>" >> $yarnSiteUrl
+ echo "      <value>mapreduce_shuffle</value>" >> $yarnSiteUrl
+ echo "  </property>" >> $yarnSiteUrl
+
+ #nodemanager的aux-service类配置
+ echo "  <property>" >> $yarnSiteUrl
+ echo "      <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>" >> $yarnSiteUrl
+ echo "      <value>org.apache.hadoop.mapred.ShuffleHandler</value>" >> $yarnSiteUrl
+ echo "  </property>" >> $yarnSiteUrl
+
+ #resourcemanager的地址
+ echo "  <property>" >> $yarnSiteUrl
+ echo "      <name>yarn.resourcemanager.address</name>" >> $yarnSiteUrl
+ echo "      <value>node1:8032</value>" >> $yarnSiteUrl
+ echo "  </property>" >> $yarnSiteUrl
+
+ #resourcemanager的scheduler地址
+ echo "  <property>" >> $yarnSiteUrl
+ echo "      <name>yarn.resourcemanager.scheduler.address</name>" >> $yarnSiteUrl
+ echo "      <value>node1:8030</value>" >> $yarnSiteUrl
+ echo "  </property>" >> $yarnSiteUrl
+
+ #resourcemanager的resource-tracker地址
+ echo "  <property>" >> $yarnSiteUrl
+ echo "      <name>yarn.resourcemanager.resource-tracker.address</name>" >> $yarnSiteUrl
+ echo "      <value>node1:8031</value>" >> $yarnSiteUrl
+ echo "  </property>" >> $yarnSiteUrl
+
+ #resourcemanager的admin地址
+ echo "  <property>" >> $yarnSiteUrl
+ echo "      <name>yarn.resourcemanager.admin.address</name>" >> $yarnSiteUrl
+ echo "      <value>node1:8033</value>" >> $yarnSiteUrl
+ echo "  </property>" >> $yarnSiteUrl
+
+ #resourcemanager的webapp地址
+ echo "  <property>" >> $yarnSiteUrl
+ echo "      <name>yarn.resourcemanager.webapp.address</name>" >> $yarnSiteUrl
+ echo "      <value>node1:8088</value>" >> $yarnSiteUrl
+ echo "  </property>" >> $yarnSiteUrl
+
+ echo "</configuration>" >> $yarnSiteUrl
+}
+
+function configureSlaves()
+{
+ slavesUrl=$1
+ 
+ sed -i 's/^[^#]/#&/' $slavesUrl
+ 
+ echo "node1" >> $slavesUrl
+ echo "node2" >> $slavesUrl
+ echo "node3" >> $slavesUrl
+}
+
 function installHadoop()
 {
  #1.在frames.txt中查看是否需要安装hadoop
@@ -106,12 +201,19 @@ function installHadoop()
 
    #2.查看/opt/frames目录下是否有hadoop安装包
    hadoopIsExists=`find /opt/frames -name $hadoop`
+   echo $hadoopIsExists
    if [[ ${#hadoopIsExists} -ne 0  ]];then
      
        if [[ ! -d /opt/app ]];then
            mkdir /opt/app && chmod -R 775 /opt/app
        fi 
-   
+
+       #删除旧的
+       hadoop_home_old=`find /opt/app -maxdepth 1 -name "hadoop*"`
+       for i in $hadoop_home_old;do
+           rm -rf $i
+       done
+
        #3.解压到指定文件夹/opt/app中
        echo "开始解压hadoop安装包"
        tar -zxvf $hadoopIsExists -C /opt/app >& /dev/null
@@ -149,6 +251,14 @@ function installHadoop()
        #8.配置hdfs-site.xml
        configureHdfsSite $hadoop_home/etc/hadoop/hdfs-site.xml
 
+       #9.配置mapred-site.xml
+       configureMapredSite $hadoop_home/etc/hadoop/mapred-site.xml
+
+       #10.配置yarn-site.xml
+       configureYarnSite $hadoop_home/etc/hadoop/yarn-site.xml
+
+       #11.配置slaves
+       configureSlaves $hadoop_home/etc/hadoop/slaves
    fi
  fi
 }
