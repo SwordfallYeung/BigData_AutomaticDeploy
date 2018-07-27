@@ -38,24 +38,25 @@ function configureIpAddr()
  UUID=`grep "^#UUID=*" $fileUrl | head -1`
  
  #2.配置本地源
- #配置名字
- echo "NAME=ens33" >> $fileUrl
- #网卡名称
- echo "DEVICE=ens33" >> $fileUrl
  #连接类型
  echo "TYPE=Ethernet" >> $fileUrl
- #唯一标识
- echo "${UUID:1}" >> $fileUrl
- #开机即启动网络
- echo "ONBOOT=yes" >> $fileUrl
- echo "NM_CONTROLLED=yes" >> $fileUrl
  #静态IP
  echo "BOOTPROTO=static" >> $fileUrl
+ echo "DEFROUTE=yes" >> $fileUrl
+ echo "IPV4_FAILURE_FATAL=no" >> $fileUrl
  #IPV6关闭
  echo "IPV6INIT=no" >> $fileUrl
- echo "USERCTL=no" >> $fileUrl
+ #配置名字
+ echo "NAME=ens33" >> $fileUrl
+ #唯一标识
+ echo "${UUID:1}" >> $fileUrl
+ #网卡名称
+ echo "DEVICE=ens33" >> $fileUrl
+ #开机即启动网络
+ echo "ONBOOT=yes" >> $fileUrl
  #IP地址
  echo "IPADDR=$ip" >> $fileUrl
+ echo "PREFIX=24" >> $fileUrl
  #网络掩码
  echo "NETMASK=255.255.255.0" >> $fileUrl
  #网关
