@@ -33,6 +33,9 @@ function configureJDK()
     sed -i "/^export PATH=\$PATH:\$JAVA_HOME\/bin/d" $profile
     echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> $profile
     echo "export CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> $profile
+
+    #5.更新/etc/profile文件
+    source /etc/profile && source /etc/profile
     #不需要
     #pathIsExists=`grep "^export PATH=" $profile`
     #java_homeIsExists=`grep "^export PATH=" $profile | grep "JAVA_HOME/bin"`

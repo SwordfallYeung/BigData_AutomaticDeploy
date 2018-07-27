@@ -30,7 +30,10 @@ function configureScala()
     #4.在/etc/profile配置PATH
     sed -i "/^export PATH=\$PATH:\$SCALA_HOME\/bin/d" $profile
     echo "export PATH=\$PATH:\$SCALA_HOME/bin" >> $profile
-  
+
+    #5.更新/etc/profile文件
+    source /etc/profile && source /etc/profile  
+
     #不需要
     #pathIsExists=`grep "^export PATH=" $profile`
     #scala_homeIsExists=`grep "^export PATH=" $profile | grep "SCALA_HOME/bin"`
