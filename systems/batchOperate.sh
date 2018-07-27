@@ -4,7 +4,7 @@ hostname=$1
 
 #1.修改机器名hostname
 echo "1.修改hostname为node1"
-/home/hadoop/automaticDeploy/systems/hangeHostname.sh $hostname
+/home/hadoop/automaticDeploy/systems/changeHostname.sh $hostname
 
 #2.ip地址修改，目前只能每台机器独自修改ip地址
 echo "2.ip地址修改暂无"
