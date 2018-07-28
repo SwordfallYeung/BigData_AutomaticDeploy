@@ -239,7 +239,7 @@ function installHadoop()
        echo "" >> $hadoop_home/etc/hadoop/hadoop-env.sh
        echo "$java_home" >> $hadoop_home/etc/hadoop/hadoop-env.sh
        echo "export PATH=\$PATH:$hadoop_home/bin" >> $hadoop_home/etc/hadoop/hadoop-env.sh
-       #source $hadoop_home/etc/hadoop/hadoop-env.sh
+       source $hadoop_home/etc/hadoop/hadoop-env.sh && source $hadoop_home/etc/hadoop/hadoop-env.sh
        
        #6.配置yarn-env.sh文件
        num=`sed -n -e "/# export JAVA_HOME=/="  $hadoop_home/etc/hadoop/yarn-env.sh`  
@@ -259,6 +259,16 @@ function installHadoop()
 
        #11.配置slaves
        configureSlaves $hadoop_home/etc/hadoop/slaves
+
+       #12.配置HadoopHome和Path
+       profile=/etc/profile
+       sed -i "/^export HADOOP_HOME/d" $profile
+       echo "export HADOOP_HOME=$hadoop_home" >> $profile
+       sed -i "/^export PATH=\$PATH:\$HADOOP_HOME\/bin/d" $profile
+       echo "export PATH=\$PATH:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin" >> $profile
+       
+       #13更新/etc/profile文件
+       source /etc/profile && source /etc/profile
    fi
  fi
 }
