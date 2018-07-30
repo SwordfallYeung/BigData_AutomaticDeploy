@@ -1,8 +1,8 @@
 jdk-8u181-linux-x64.tar.gz true
 scala-2.11.0.tgz true
 hadoop-2.7.6.tar.gz true
-hbase-2.0.1-bin.tar.gz false
-apache-hive-2.3.3-bin.tar.gz false
-zookeeper-3.4.13.tar.gz false
-spark-2.3.1-bin-hadoop2.7.tgz false
-kafka_2.11-1.1.1.tgz false
+hbase-2.0.1-bin.tar.gz true
+apache-hive-2.3.3-bin.tar.gz true
+zookeeper-3.4.13.tar.gz true
+spark-2.3.1-bin-hadoop2.7.tgz true
+kafka_2.11-1.1.1.tgz true
