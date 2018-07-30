@@ -2,39 +2,39 @@
 
 hostname=$1
 
-#1.ipµØÖ·ĞŞ¸Ä£¬Ä¿Ç°Ö»ÄÜÃ¿Ì¨»úÆ÷¶À×ÔĞŞ¸ÄipµØÖ·
-echo "2.ipµØÖ·ĞŞ¸ÄÔİÎŞ"
+#1.ipåœ°å€ä¿®æ”¹ï¼Œç›®å‰åªèƒ½æ¯å°æœºå™¨ç‹¬è‡ªä¿®æ”¹ipåœ°å€
+echo "1.ipåœ°å€ä¿®æ”¹æš‚æ— "
 
-#2.ĞŞ¸Ä»úÆ÷Ãûhostname
-echo "1.ĞŞ¸ÄhostnameÎªnode1"
+#2.ä¿®æ”¹æœºå™¨åhostname
+echo "2.ä¿®æ”¹hostnameä¸ºnode1"
 /home/hadoop/automaticDeploy/systems/changeHostname.sh $hostname
 
-#3.hostÅäÖÃÎÄ¼şĞŞ¸Ä
-echo "3.°Ñ¼¯Èºip¼°ÆäÓ³ÉäµÄhostnameÌí¼Óµ½/etc/hostsÖĞ"
+#3.hosté…ç½®æ–‡ä»¶ä¿®æ”¹
+echo "3.æŠŠé›†ç¾¤ipåŠå…¶æ˜ å°„çš„hostnameæ·»åŠ åˆ°/etc/hostsä¸­"
 /home/hadoop/automaticDeploy/systems/addClusterIps.sh
 
-#4.¹Ø±Õ·À»ğÇ½¡¢SELINUX £¬ĞèÒªÊäÈë²ÎÊıclose»òstart
-echo "4.¹Ø±Õ·À»ğÇ½¡¢SELINUX"
+#4.å…³é—­é˜²ç«å¢™ã€SELINUX ï¼Œéœ€è¦è¾“å…¥å‚æ•°closeæˆ–start
+echo "4.å…³é—­é˜²ç«å¢™ã€SELINUX"
 /home/hadoop/automaticDeploy/systems/closeFirewall.sh close
 
-#5.Ìí¼ÓbigdataÓÃ»§Ãû £¬ĞèÒªÊäÈë²ÎÊıcreate»òdelete
-echo "5.Ìí¼ÓbigdataÓÃ»§Ãû"
+#5.æ·»åŠ bigdataç”¨æˆ·å ï¼Œéœ€è¦è¾“å…¥å‚æ•°createæˆ–delete
+echo "5.æ·»åŠ bigdataç”¨æˆ·å"
 /home/hadoop/automaticDeploy/systems/autoCreateUser.sh create
 
-#6.ÅäÖÃyumÔ´
-echo "6.ÅäÖÃyumÔ´"
+#6.é…ç½®yumæº
+echo "6.é…ç½®yumæº"
 /home/hadoop/automaticDeploy/systems/configureYum.sh $hostname
 
-#7.ÅäÖÃSSHÎŞÃÜÂëµÇÂ¼
-echo "7.¼¯Èº¸÷½ÚµãÖ®¼äÅäÖÃSSHÎŞÃÜÂëµÇÂ¼"
+#7.é…ç½®SSHæ— å¯†ç ç™»å½•
+echo "7.é›†ç¾¤å„èŠ‚ç‚¹ä¹‹é—´é…ç½®SSHæ— å¯†ç ç™»å½•"
 /home/hadoop/automaticDeploy/systems/sshFreeLogin.sh
 
-#8.ÅäÖÃJDK»·¾³
-echo "8.ÅäÖÃjdk»·¾³"
+#8.é…ç½®JDKç¯å¢ƒ
+echo "8.é…ç½®jdkç¯å¢ƒ"
 /home/hadoop/automaticDeploy/systems/configureJDK.sh
 
-#9.ÅäÖÃSCALA»·¾³
-echo "9.ÅäÖÃscala»·¾³"
+#9.é…ç½®SCALAç¯å¢ƒ
+echo "9.é…ç½®scalaç¯å¢ƒ"
 /home/hadoop/automaticDeploy/systems/configureScala.sh
 
 echo ""
