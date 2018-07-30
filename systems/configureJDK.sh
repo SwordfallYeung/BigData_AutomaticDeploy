@@ -2,16 +2,16 @@
 
 function configureJDK()
 {
- #1.ÔÚframes.txtÖÐ²é¿´ÊÇ·ñÐèÒª°²×°java
+ #1.åœ¨frames.txtä¸­æŸ¥çœ‹æ˜¯å¦éœ€è¦å®‰è£…java
  javaInfo=`egrep "^jdk" /home/hadoop/automaticDeploy/frames.txt`
  
  java=`echo $javaInfo | cut -d " " -f1`
  isInstall=`echo $javaInfo | cut -d " " -f2`
 
- #ÊÇ·ñ°²×°
+ #æ˜¯å¦å®‰è£…
  if [[ $isInstall = "true" ]];then
  
-    #2.²é¿´/opt/framesÄ¿Â¼ÏÂÊÇ·ñÓÐjava°²×°°ü
+    #2.æŸ¥çœ‹/opt/framesç›®å½•ä¸‹æ˜¯å¦æœ‰javaå®‰è£…åŒ…
     javaIsExists=`find /opt/frames -name $java`
     
     if [[ ${#javaIsExists} -ne 0 ]];then
@@ -22,31 +22,31 @@ function configureJDK()
  
         mkdir /usr/lib/java && chmod -R 777 /usr/lib/java
    
-        #2.½âÑ¹µ½Ö¸¶¨ÎÄ¼þ¼Ð/usr/lib/javaÖÐ 
-        echo "¿ªÆô½âÑ¹jdk°²×°°ü"
+        #2.è§£åŽ‹åˆ°æŒ‡å®šæ–‡ä»¶å¤¹/usr/lib/javaä¸­ 
+        echo "å¼€å¯è§£åŽ‹jdkå®‰è£…åŒ…"
         tar -zxvf $javaIsExists -C /usr/lib/java >& /dev/null
-        echo "jdk°²×°°ü½âÑ¹Íê±Ï"
+        echo "jdkå®‰è£…åŒ…è§£åŽ‹å®Œæ¯•"
     
         java_home=`find /usr/lib/java -maxdepth 1 -name "jdk*"`
 
-        #3.ÔÚ/etc/profileÅäÖÃJAVA_HOME
+        #3.åœ¨/etc/profileé…ç½®JAVA_HOME
         profile=/etc/profile
         sed -i "/^export JAVA_HOME/d" $profile
         echo "export JAVA_HOME=$java_home" >> $profile
  
-        #4.ÔÚ/etc/profileÅäÖÃPATH
+        #4.åœ¨/etc/profileé…ç½®PATH
         sed -i "/^export PATH=\$PATH:\$JAVA_HOME\/bin/d" $profile
         echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> $profile
         sed -i "/^export CLASSPATH=.:\$JAVA_HOME/d" $profile
         echo "export CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> $profile
 
-        #5.¸üÐÂ/etc/profileÎÄ¼þ
+        #5.æ›´æ–°/etc/profileæ–‡ä»¶
         source /etc/profile && source /etc/profile
     else
-         echo "/opt/framesÄ¿Â¼ÏÂÃ»ÓÐjdk°²×°°ü"
+         echo "/opt/framesç›®å½•ä¸‹æ²¡æœ‰jdkå®‰è£…åŒ…"
     fi
  else
-     echo "/opt/framesÄ¿Â¼ÏÂÃ»ÓÐjdk°²×°°ü"
+     echo "/opt/framesç›®å½•ä¸‹æ²¡æœ‰jdkå®‰è£…åŒ…"
  fi
 }
 
