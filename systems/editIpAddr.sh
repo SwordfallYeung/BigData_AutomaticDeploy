@@ -1,17 +1,17 @@
 #! /bin/bash
 ################
-#Õë¶ÔCentos-7.0
+#é’ˆå¯¹Centos-7.0
 ################
 
-#´¦ÀíÉæ¼°µ½IPµØÖ·ÉèÖÃµÄÍøÂçÎÄ¼ş£¬±¸·İ²¢´´½¨ĞÂµÄ
+#å¤„ç†æ¶‰åŠåˆ°IPåœ°å€è®¾ç½®çš„ç½‘ç»œæ–‡ä»¶ï¼Œå¤‡ä»½å¹¶åˆ›å»ºæ–°çš„
 function doWithNetworkFile()
 {
- #1.²éÕÒ/etc/sysconfig/network-scripts/Ä¿Â¼ÏÂÊÇ·ñ´æÔÚifcfg-ens33ÎÄ¼ş£¬´æÔÚÔòÖØÃüÃûÎª.bak½áÎ²µÄ
+ #1.æŸ¥æ‰¾/etc/sysconfig/network-scripts/ç›®å½•ä¸‹æ˜¯å¦å­˜åœ¨ifcfg-ens33æ–‡ä»¶ï¼Œå­˜åœ¨åˆ™é‡å‘½åä¸º.bakç»“å°¾çš„
  fileResult=`find /etc/sysconfig/network-scripts/ -name "ifcfg-ens33"`
 
  if [[ $fileResult != "" ]]
  then
-     #2.´´½¨Ò»¸öifcfg-ens33ÎÄ¼şÓÃÓÚÅäÖÃÍøÂçÉèÖÃ
+     #2.åˆ›å»ºä¸€ä¸ªifcfg-ens33æ–‡ä»¶ç”¨äºé…ç½®ç½‘ç»œè®¾ç½®
      result=`find /etc/sysconfig/network-scripts -wholename $fileResult.bak`
      if [[ -z $result ]]  
      then        
@@ -23,41 +23,41 @@ function doWithNetworkFile()
  fi
 }
 
-#ÅäÖÃipµØÖ·
+#é…ç½®ipåœ°å€
 function configureIpAddr()
 { 
  ip=$1
  gateway=$2
  fileUrl=/etc/sysconfig/network-scripts/ifcfg-ens33 
 
- #1.°Ñifcfg-ens33ÎÄ¼ş·Ç#¿ªÍ·µÄĞĞ×¢ÊÍµô
+ #1.æŠŠifcfg-ens33æ–‡ä»¶é#å¼€å¤´çš„è¡Œæ³¨é‡Šæ‰
  sed -i 's/^[^#]/#&/' $fileUrl
  
  UUID=`grep "^#UUID=*" $fileUrl | head -1`
  
- #2.ÅäÖÃÄÚÍøIPµØÖ·
- #Á¬½ÓÀàĞÍ
+ #2.é…ç½®å†…ç½‘IPåœ°å€
+ #è¿æ¥ç±»å‹
  echo "TYPE=Ethernet" >> $fileUrl
- #¾²Ì¬IP
+ #é™æ€IP
  echo "BOOTPROTO=static" >> $fileUrl
  echo "DEFROUTE=yes" >> $fileUrl
  echo "IPV4_FAILURE_FATAL=no" >> $fileUrl
- #IPV6¹Ø±Õ
+ #IPV6å…³é—­
  echo "IPV6INIT=no" >> $fileUrl
- #ÅäÖÃÃû×Ö
+ #é…ç½®åå­—
  echo "NAME=ens33" >> $fileUrl
- #Î¨Ò»±êÊ¶
+ #å”¯ä¸€æ ‡è¯†
  echo "${UUID:1}" >> $fileUrl
- #Íø¿¨Ãû³Æ
+ #ç½‘å¡åç§°
  echo "DEVICE=ens33" >> $fileUrl
- #¿ª»ú¼´Æô¶¯ÍøÂç
+ #å¼€æœºå³å¯åŠ¨ç½‘ç»œ
  echo "ONBOOT=yes" >> $fileUrl
- #IPµØÖ·
+ #IPåœ°å€
  echo "IPADDR=$ip" >> $fileUrl
  echo "PREFIX=24" >> $fileUrl
- #ÍøÂçÑÚÂë
+ #ç½‘ç»œæ©ç 
  echo "NETMASK=255.255.255.0" >> $fileUrl
- #Íø¹Ø
+ #ç½‘å…³
  echo "GATEWAY=$gateway" >> $fileUrl 
 }
 
@@ -66,12 +66,12 @@ function editIpAddr()
  ip=$1
  gateway=$2
  
- #´¦ÀíÉæ¼°µ½IPµØÖ·ÉèÖÃµÄÍøÂçÎÄ¼ş£¬±¸·İ²¢´´½¨ĞÂµÄ
+ #å¤„ç†æ¶‰åŠåˆ°IPåœ°å€è®¾ç½®çš„ç½‘ç»œæ–‡ä»¶ï¼Œå¤‡ä»½å¹¶åˆ›å»ºæ–°çš„
  doWithNetworkFile
- #ÔÚ/etc/sysconfig/network-scripts/ifcfg-ens33ÉÏÉèÖÃIPµØÖ·
+ #åœ¨/etc/sysconfig/network-scripts/ifcfg-ens33ä¸Šè®¾ç½®IPåœ°å€
  configureIpAddr $ip $gateway 
  
- #ÖØÆôÍøÂç·şÎñ
+ #é‡å¯ç½‘ç»œæœåŠ¡
  service network restart
 }
 

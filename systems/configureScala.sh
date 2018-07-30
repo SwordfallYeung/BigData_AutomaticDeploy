@@ -2,16 +2,16 @@
 
 function configureScala()
 {
- #1.ÔÚframes.txtÖÐ²é¿´ÊÇ·ñÐèÒª°²×°scala
+ #1.åœ¨frames.txtä¸­æŸ¥çœ‹æ˜¯å¦éœ€è¦å®‰è£…scala
  scalaInfo=`egrep "^scala" /home/hadoop/automaticDeploy/frames.txt`
  
  scala=`echo $scalaInfo | cut -d " " -f1`
- isInstall=`echo $javaInfo | cut -d " " -f2`
+ isInstall=`echo $scalaInfo | cut -d " " -f2`
 
- #ÊÇ·ñ°²×°
+ #æ˜¯å¦å®‰è£…
  if [[ $isInstall = "true" ]];then
      
-     #1.²éÕÒ/opt/framesÄ¿Â¼ÏÂÊÇ·ñÓÐScala°²×°°ü
+     #1.æŸ¥æ‰¾/opt/framesç›®å½•ä¸‹æ˜¯å¦æœ‰Scalaå®‰è£…åŒ…
      scalaIsExists=`find /opt/frames -name $scala`
 
     if [[ ${#scalaIsExists} -ne 0 ]];then
@@ -22,29 +22,29 @@ function configureScala()
 
        mkdir /usr/lib/scala && chmod -R 777 /usr/lib/scala
 
-       #2.½âÑ¹µ½Ö¸¶¨ÎÄ¼þ¼Ð/usr/lib/scalaÖÐ
-       echo "¿ªÊ¼½âÑ¹scala°²×°°ü"
+       #2.è§£åŽ‹åˆ°æŒ‡å®šæ–‡ä»¶å¤¹/usr/lib/scalaä¸­
+       echo "å¼€å§‹è§£åŽ‹scalaå®‰è£…åŒ…"
        tar -zxvf $scalaIsExists -C /usr/lib/scala >& /dev/null
-       echo "scala°²×°°ü½âÑ¹Íê±Ï"
+       echo "scalaå®‰è£…åŒ…è§£åŽ‹å®Œæ¯•"
 
-       scala_home=`find /usr/lib/scala -maxdepth 1 -name "scala*"`
+       scala_home=`find /usr/lib/scala -maxdepth 1 -name "scala-*"`
     
-       #3.ÔÚ/etc/profileÅäÖÃSCALA_HOME
+       #3.åœ¨/etc/profileé…ç½®SCALA_HOME
        profile=/etc/profile
        sed -i "/^export SCALA_HOME/d" $profile
        echo "export SCALA_HOME=$scala_home" >> $profile
 
-       #4.ÔÚ/etc/profileÅäÖÃPATH
+       #4.åœ¨/etc/profileé…ç½®PATH
        sed -i "/^export PATH=\$PATH:\$SCALA_HOME\/bin/d" $profile
        echo "export PATH=\$PATH:\$SCALA_HOME/bin" >> $profile
 
-       #5.¸üÐÂ/etc/profileÎÄ¼þ
+       #5.æ›´æ–°/etc/profileæ–‡ä»¶
        source /etc/profile && source /etc/profile  
     else 
-        echo "/opt/framesÄ¿Â¼ÏÂÃ»ÓÐscala°²×°°ü"
+        echo "/opt/framesç›®å½•ä¸‹æ²¡æœ‰scalaå®‰è£…åŒ…1"
     fi
  else
-       echo "/opt/framesÄ¿Â¼ÏÂÃ»ÓÐscala°²×°°ü"
+       echo "/opt/framesç›®å½•ä¸‹æ²¡æœ‰scalaå®‰è£…åŒ…2"
  fi
 
 }
